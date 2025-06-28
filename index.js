@@ -3,6 +3,24 @@ const path = require('path')
 const port = 5000
 const app =express()
 
+const fs = require('fs'); // Added for file logging
+
+
+//  Logging middleware
+app.use((req, res, next) => {
+    const logEntry = `[${new Date().toLocaleString()}] ${req.method} ${req.url}\n`;
+    fs.appendFile(path.join(__dirname, 'log.txt'), logEntry, (err) => {
+        if (err) {
+            console.error('Failed to write log:', err);
+        }
+    });
+    next();
+});
+
+
+
+
+
 
 app.use(express.static(path.join(__dirname,"public")))
 

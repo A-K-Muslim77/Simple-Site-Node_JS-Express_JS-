@@ -1,0 +1,4 @@
+[6/28/2025, 3:39:42 PM] GET /
+[6/28/2025, 3:39:42 PM] GET /css/style.css
+[6/28/2025, 3:40:02 PM] GET /team
+[6/28/2025, 3:40:02 PM] GET /css/style.css
