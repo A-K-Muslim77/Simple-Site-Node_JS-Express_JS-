@@ -4,30 +4,39 @@ const port = 5000
 const app =express()
 
 const fs = require('fs'); // Added for file logging
+const rfs = require('rotating-file-stream'); // Rotating log support
 
+
+//  Create logs directory if not exists
+const logDirectory = path.join(__dirname, 'logs');
+if (!fs.existsSync(logDirectory)) {
+    fs.mkdirSync(logDirectory);
+}
+
+// Create a rotating stream (daily)
+const accessLogStream = rfs.createStream((time, index) => {
+    if (!time) return 'access.log';
+    const day = time.toISOString().slice(0, 10); // e.g. "2025-06-28"
+    return `${day}.log`;
+}, {
+    interval: '1d',      // rotate daily
+    path: logDirectory
+});
 
 //  Logging middleware
 app.use((req, res, next) => {
-  const start = new Date();
-
-  // When response finishes, log details
-  res.on('finish', () => {
-    const timestamp = start.toLocaleString();
-    const method = req.method;
-    const url = req.url;
-    const status = res.statusCode;
-    const ip = req.ip || req.connection.remoteAddress;
-
-    const logEntry = `[${timestamp}] ${ip} ${method} ${url} ${status}\n`;
-
-    fs.appendFile(path.join(__dirname, 'log.txt'), logEntry, (err) => {
-      if (err) {
-        console.error('Failed to write log:', err);
-      }
+    const start = new Date();
+    res.on('finish', () => {
+        const log = {
+            timestamp: start.toISOString(),
+            ip: req.ip || req.connection.remoteAddress,
+            method: req.method,
+            url: req.url,
+            status: res.statusCode
+        };
+        accessLogStream.write(JSON.stringify(log) + '\n');
     });
-  });
-
-  next();
+    next();
 });
 
 

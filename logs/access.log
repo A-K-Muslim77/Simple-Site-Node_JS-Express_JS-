@@ -1,0 +1,4 @@
+{"timestamp":"2025-06-28T09:51:41.105Z","ip":"::1","method":"GET","url":"/about","status":304}
+{"timestamp":"2025-06-28T09:51:41.112Z","ip":"::1","method":"GET","url":"/css/style.css","status":304}
+{"timestamp":"2025-06-28T09:51:42.192Z","ip":"::1","method":"GET","url":"/","status":304}
+{"timestamp":"2025-06-28T09:51:42.197Z","ip":"::1","method":"GET","url":"/css/style.css","status":304}
